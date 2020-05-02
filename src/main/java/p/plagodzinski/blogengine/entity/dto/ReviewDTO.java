@@ -1,18 +1,40 @@
 package p.plagodzinski.blogengine.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
+public class ReviewDTO {
+  private long id;
+  private String title;
+  private String content;
+  private double rating;
 
-@Value.Immutable
-@JsonSerialize(as = ReviewDTO.class)
-@JsonDeserialize(as = ReviewDTO.class)
-public interface ReviewDTO {
-    long getId();
+  public long getId() {
+    return id;
+  }
 
-    String getTitle();
+  public void setId(final long id) {
+    this.id = id;
+  }
 
-    String getContent();
+  public String getTitle() {
+    return title;
+  }
 
-    double getRating();
+  public void setTitle(final String title) {
+    this.title = title;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(final String content) {
+    this.content = content;
+  }
+
+  public double getRating() {
+    return rating;
+  }
+
+  public void setRating(final double rating) {
+    this.rating = rating;
+  }
 }

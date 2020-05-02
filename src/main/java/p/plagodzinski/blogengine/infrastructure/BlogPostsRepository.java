@@ -6,7 +6,4 @@ import p.plagodzinski.blogengine.entity.BlogPost;
 
 @Repository
 public interface BlogPostsRepository extends JpaRepository<BlogPost, Long> {
-
 }
-
-

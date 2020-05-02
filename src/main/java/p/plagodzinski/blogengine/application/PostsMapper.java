@@ -10,6 +10,9 @@ import p.plagodzinski.blogengine.entity.dto.PostDTO;
 public interface PostsMapper {
     CreatePostResponseDTO mapToCreatePostResponse(BlogPost blogPost);
 
-    @Mapping(source = "averageRating", target = "averageRating", qualifiedByName = "calculateAverageRatingFromReviews")
+    @Mapping(
+            source = "averageRating",
+            target = "averageRating",
+            qualifiedByName = "calculateAverageRatingFromReviews")
     PostDTO mapToGetPostInfoDTO(BlogPost blogPost);
 }

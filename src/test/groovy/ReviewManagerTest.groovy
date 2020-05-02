@@ -4,8 +4,8 @@ import p.plagodzinski.blogengine.BlogEngineApplication
 import p.plagodzinski.blogengine.application.PostsManager
 import p.plagodzinski.blogengine.application.ReviewManager
 import p.plagodzinski.blogengine.application.exceptions.NotFoundReviewException
-import p.plagodzinski.blogengine.entity.dto.ImmutableCreatePostDTO
-import p.plagodzinski.blogengine.entity.dto.ImmutableCreateReviewDTO
+import p.plagodzinski.blogengine.entity.dto.CreatePostDTO
+import p.plagodzinski.blogengine.entity.dto.CreateReviewDTO
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -19,16 +19,10 @@ class ReviewManagerTest extends Specification {
     private PostsManager postsManager
 
     @Shared
-    def createPostDto = ImmutableCreatePostDTO.builder().title("Test title").content("Test Content").build()
+    def createPostDto = new CreatePostDTO("Test title", "Test Content")
 
     def buildCreateReviewDTO(long postId) {
-        return ImmutableCreateReviewDTO
-                .builder()
-                .title("Test review")
-                .content("Test content")
-                .rating(1.0D)
-                .postId(postId)
-                .build()
+        return new CreateReviewDTO(postId, "Test review", "Test content", 1.0D)
     }
 
     def "Add review to existing post"() {

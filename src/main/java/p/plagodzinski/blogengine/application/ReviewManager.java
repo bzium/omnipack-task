@@ -23,7 +23,10 @@ public class ReviewManager {
     private final BlogPostsRepository blogPostsRepository;
     private final ReviewMapper reviewMapper;
 
-    public ReviewManager(final ReviewRepository reviewRepository, final BlogPostsRepository blogPostsRepository, final ReviewMapper reviewMapper) {
+    public ReviewManager(
+            final ReviewRepository reviewRepository,
+            final BlogPostsRepository blogPostsRepository,
+            final ReviewMapper reviewMapper) {
         this.reviewRepository = reviewRepository;
         this.blogPostsRepository = blogPostsRepository;
         this.reviewMapper = reviewMapper;
@@ -31,13 +34,17 @@ public class ReviewManager {
 
     @Transactional
     public CreateReviewResponseDTO createNewReview(final CreateReviewDTO createReviewDTO) {
-        return blogPostsRepository.findById(createReviewDTO.getPostId()).map(blogPost -> {
-            var postReview = new PostReview();
-            postReview.fill(createReviewDTO, blogPost);
-            postReview = reviewRepository.save(postReview);
-            LOGGER.info("Create new review with id {}", postReview.getId());
-            return reviewMapper.mapToCreateReviewResponseDto(postReview);
-        }).orElseThrow(() -> new NotFoundPostException(createReviewDTO.getPostId()));
+        return blogPostsRepository
+                .findById(createReviewDTO.getPostId())
+                .map(
+                        blogPost -> {
+                            var postReview = new PostReview();
+                            postReview.fill(createReviewDTO, blogPost);
+                            postReview = reviewRepository.save(postReview);
+                            LOGGER.info("Create new review with id {}", postReview.getId());
+                            return reviewMapper.mapToCreateReviewResponseDto(postReview);
+                        })
+                .orElseThrow(() -> new NotFoundPostException(createReviewDTO.getPostId()));
     }
 
     @Transactional

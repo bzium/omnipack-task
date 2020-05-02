@@ -1,6 +1,5 @@
 package p.plagodzinski.blogengine.application.exceptions;
 
-
 public class NotFoundReviewException extends RuntimeException {
     private static final long serialVersionUID = 1370620096475447638L;
 

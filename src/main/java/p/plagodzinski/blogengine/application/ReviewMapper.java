@@ -6,5 +6,5 @@ import p.plagodzinski.blogengine.entity.dto.CreateReviewResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
-    CreateReviewResponseDTO mapToCreateReviewResponseDto(PostReview postReview);
+  CreateReviewResponseDTO mapToCreateReviewResponseDto(PostReview postReview);
 }

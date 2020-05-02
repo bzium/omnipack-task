@@ -1,18 +1,12 @@
 import p.plagodzinski.blogengine.entity.BlogPost
 import p.plagodzinski.blogengine.entity.PostReview
-import p.plagodzinski.blogengine.entity.dto.ImmutableCreateReviewDTO
+import p.plagodzinski.blogengine.entity.dto.CreateReviewDTO
 import spock.lang.Specification
 
 class BlogPostTest extends Specification {
 
     def createReviewDTO(double rating) {
-        return ImmutableCreateReviewDTO
-                .builder()
-                .postId(1)
-                .title("Test")
-                .content("Test")
-                .rating(rating)
-                .build()
+        return new CreateReviewDTO(1, "Test", "Test", rating)
     }
 
     def "Calculate average for 2 elements"() {

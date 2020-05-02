@@ -23,83 +23,68 @@ import java.util.List;
 @Entity(name = "BlogPost")
 public class BlogPost {
 
-  private static final double NO_REVIEW_RATING = 0.0;
+    private static final double NO_REVIEW_RATING = 0.0;
+    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<PostReview> postReviews = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "POST_ID")
+    private Long id;
+    @Version
+    private Long version;
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "TITLE", length = 50, nullable = false)
+    private String title;
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "CONTENT", nullable = false)
+    private String content;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+    @Transient
+    private double averageRating; // We only need to simply mapping by mapstruct
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "POST_ID")
-  private Long id;
+    public Long getId() {
+        return id;
+    }
 
-  @Version
-  private Long version;
+    public String getTitle() {
+        return title;
+    }
 
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "TITLE", length = 50, nullable = false)
-  private String title;
+    public String getContent() {
+        return content;
+    }
 
-  @NotNull
-  @Size(min = 1, max = 255)
-  @Column(name = "CONTENT", nullable = false)
-  private String content;
+    public PostStatus getStatus() {
+        return status;
+    }
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private PostStatus status;
+    public List<PostReview> getPostReviews() {
+        return postReviews;
+    }
 
-  @OneToMany(
-          mappedBy = "blogPost",
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
-  )
-  private final List<PostReview> postReviews = new ArrayList<>();
+    public double getAverageRating() {
+        return averageRating;
+    }
 
+    public void fill(final CreatePostDTO createPostDTO) {
+        title = createPostDTO.getTitle();
+        content = createPostDTO.getContent();
+        status = PostStatus.ACTIVE;
+    }
 
-  @Transient
-  private double averageRating; // We only need to simply mapping by mapstruct
-
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public PostStatus getStatus() {
-    return status;
-  }
-
-  public List<PostReview> getPostReviews() {
-    return postReviews;
-  }
-
-  public double getAverageRating() {
-    return averageRating;
-  }
-
-  public void fill(final CreatePostDTO createPostDTO) {
-    title = createPostDTO.getTitle();
-    content = createPostDTO.getContent();
-    status = PostStatus.ACTIVE;
-  }
-
-  public void update(final ChangePostDTO changePostDTO) {
-    status = changePostDTO.getStatus();
-  }
+    public void update(final ChangePostDTO changePostDTO) {
+        status = changePostDTO.getStatus();
+    }
 
   @Named("calculateAverageRatingFromReviews")
   public double calculateAverageRatingFromReviews() {
-    return postReviews
-            .stream()
-            .mapToDouble(PostReview::getRating)
-            .average()
-            .orElse(NO_REVIEW_RATING);
+      return postReviews.stream()
+              .mapToDouble(PostReview::getRating)
+              .average()
+              .orElse(NO_REVIEW_RATING);
   }
-
 }

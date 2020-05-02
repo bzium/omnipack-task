@@ -4,8 +4,8 @@ import p.plagodzinski.blogengine.BlogEngineApplication
 import p.plagodzinski.blogengine.application.PostsManager
 import p.plagodzinski.blogengine.application.exceptions.NotFoundPostException
 import p.plagodzinski.blogengine.entity.PostStatus
-import p.plagodzinski.blogengine.entity.dto.ImmutableChangePostDTO
-import p.plagodzinski.blogengine.entity.dto.ImmutableCreatePostDTO
+import p.plagodzinski.blogengine.entity.dto.ChangePostDTO
+import p.plagodzinski.blogengine.entity.dto.CreatePostDTO
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class PostsManagerTest extends Specification {
     private PostsManager postsManager
 
     @Shared
-    def createPostDTO = ImmutableCreatePostDTO.builder().title("Test title").content("TestContent").build()
+    def createPostDTO = new CreatePostDTO("Test title", "TestContent")
 
     @Shared
     def noExistingPostId = 1234
@@ -55,7 +55,7 @@ class PostsManagerTest extends Specification {
         given: "Add new post"
         def createPostResponse = postsManager.createNewPost(createPostDTO)
         when: "Change status of post to archived"
-        def changePostDTO = ImmutableChangePostDTO.builder().id(createPostResponse.id).status(archivedStatus).build()
+        def changePostDTO = new ChangePostDTO(createPostResponse.id, archivedStatus)
         def changedPost = postsManager.changePost(changePostDTO)
         then: "Correct status is set"
         changedPost.status == archivedStatus
@@ -63,7 +63,7 @@ class PostsManagerTest extends Specification {
 
     def "Method changePost throw exception when post not exists"() {
         given: "Prepare request to change post"
-        def changePostDTO = ImmutableChangePostDTO.builder().id(noExistingPostId).status(archivedStatus).build()
+        def changePostDTO = new ChangePostDTO(noExistingPostId, archivedStatus)
         when: "Change status of post to archived"
         postsManager.changePost(changePostDTO)
         then: "Exception will be thrown"

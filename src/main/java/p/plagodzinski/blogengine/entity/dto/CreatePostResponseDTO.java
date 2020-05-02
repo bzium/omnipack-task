@@ -1,12 +1,13 @@
 package p.plagodzinski.blogengine.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
+public class CreatePostResponseDTO {
+    private long id;
 
-@Value.Immutable
-@JsonSerialize(as = CreatePostResponseDTO.class)
-@JsonDeserialize(as = CreatePostResponseDTO.class)
-public interface CreatePostResponseDTO {
-    long getId();
+    public long getId() {
+        return id;
+    }
+
+    public void setId(final long id) {
+        this.id = id;
+    }
 }

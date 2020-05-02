@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import p.plagodzinski.blogengine.application.exceptions.NotFoundPostException;
 import p.plagodzinski.blogengine.application.exceptions.NotFoundReviewException;
 import p.plagodzinski.blogengine.entity.dto.ExceptionDTO;
-import p.plagodzinski.blogengine.entity.dto.ImmutableExceptionDTO;
 
 import javax.validation.ConstraintViolationException;
 
@@ -21,36 +20,38 @@ public class BlogEngineControllerAdvice {
 
     @ExceptionHandler({NotFoundPostException.class})
     public ResponseEntity<ExceptionDTO> handleNotFoundPostException(final NotFoundPostException e) {
-        return new ResponseEntity<>(buildExceptionDTO("Not found post with id " + e.getPostId()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                buildExceptionDTO("Not found post with id " + e.getPostId()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundReviewException.class})
-    public ResponseEntity<ExceptionDTO> handleNotFoundReviewException(final NotFoundReviewException e) {
-        return new ResponseEntity<>(buildExceptionDTO("Not found review with id " + e.getReviewId()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ExceptionDTO> handleNotFoundReviewException(
+            final NotFoundReviewException e) {
+        return new ResponseEntity<>(
+                buildExceptionDTO("Not found review with id " + e.getReviewId()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<ExceptionDTO> handleConstraintViolationException(final ConstraintViolationException e) {
+    public ResponseEntity<ExceptionDTO> handleConstraintViolationException(
+            final ConstraintViolationException e) {
         return new ResponseEntity<>(buildExceptionDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TransactionSystemException.class)
-    public ResponseEntity<ExceptionDTO> handleConstrainException(final TransactionSystemException ex) {
+    public ResponseEntity<ExceptionDTO> handleConstrainException(
+            final TransactionSystemException ex) {
         if (ex.getRootCause() instanceof ConstraintViolationException) {
-            final ConstraintViolationException constraintViolationException = (ConstraintViolationException) ex.getRootCause();
+            final ConstraintViolationException constraintViolationException =
+                    (ConstraintViolationException) ex.getRootCause();
             return handleConstraintViolationException(constraintViolationException);
         } else {
-            return new ResponseEntity<>(buildExceptionDTO("Something is wrong with database"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(
+                    buildExceptionDTO("Something is wrong with database"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
     private ExceptionDTO buildExceptionDTO(final String errorMessage) {
         LOGGER.error(errorMessage);
-        return ImmutableExceptionDTO
-                .builder()
-                .errorMsg(errorMessage)
-                .build();
+        return new ExceptionDTO(errorMessage);
     }
-
 }

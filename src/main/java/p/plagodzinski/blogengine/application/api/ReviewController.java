@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import p.plagodzinski.blogengine.application.ReviewManager;
@@ -22,21 +23,26 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class ReviewController {
 
-    private final ReviewManager reviewManager;
+  private final ReviewManager reviewManager;
 
-    public ReviewController(final ReviewManager reviewManager) {
-        this.reviewManager = reviewManager;
-    }
+  public ReviewController(final ReviewManager reviewManager) {
+    this.reviewManager = reviewManager;
+  }
 
-    @PostMapping(value = "/reviews", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateReviewResponseDTO createReview(@Valid @RequestBody final CreateReviewDTO createReviewDTO) {
-        return reviewManager.createNewReview(createReviewDTO);
-    }
+  @PostMapping(
+          value = "/reviews",
+          consumes = MediaType.APPLICATION_JSON_VALUE,
+          produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  @ResponseStatus(HttpStatus.CREATED)
+  public CreateReviewResponseDTO createReview(
+          @Valid @RequestBody final CreateReviewDTO createReviewDTO) {
+    return reviewManager.createNewReview(createReviewDTO);
+  }
 
-    @DeleteMapping(value = "/reviews/{reviewId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteReview(@NotNull @PathVariable("reviewId") final long reviewId) {
-        reviewManager.removeReviewIfExists(reviewId);
-    }
+  @DeleteMapping(value = "/reviews/{reviewId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteReview(@NotNull @PathVariable("reviewId") final long reviewId) {
+    reviewManager.removeReviewIfExists(reviewId);
+  }
 }

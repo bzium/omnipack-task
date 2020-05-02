@@ -20,7 +20,8 @@ public class PostsManager {
     private final BlogPostsRepository blogPostsRepository;
     private final PostsMapper postsMapper;
 
-    public PostsManager(final BlogPostsRepository blogPostsRepository, final PostsMapper postsMapper) {
+    public PostsManager(
+            final BlogPostsRepository blogPostsRepository, final PostsMapper postsMapper) {
         this.blogPostsRepository = blogPostsRepository;
         this.postsMapper = postsMapper;
     }
@@ -48,13 +49,14 @@ public class PostsManager {
     public PostDTO changePost(final ChangePostDTO changePostDTO) {
         return blogPostsRepository
                 .findById(changePostDTO.getId())
-                .map(blogPost -> {
-                    LOGGER.info("Change status of post {} to {}", blogPost.getId(), changePostDTO.getStatus());
-                    blogPost.update(changePostDTO);
-                    return blogPostsRepository.save(blogPost);
-                })
+                .map(
+                        blogPost -> {
+                            LOGGER.info(
+                                    "Change status of post {} to {}", blogPost.getId(), changePostDTO.getStatus());
+                            blogPost.update(changePostDTO);
+                            return blogPostsRepository.save(blogPost);
+                        })
                 .map(postsMapper::mapToGetPostInfoDTO)
                 .orElseThrow(() -> new NotFoundPostException(changePostDTO.getId()));
     }
-
 }

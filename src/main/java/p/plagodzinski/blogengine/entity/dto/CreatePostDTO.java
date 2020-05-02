@@ -1,21 +1,28 @@
 package p.plagodzinski.blogengine.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Value.Immutable
-@JsonSerialize(as = CreatePostDTO.class)
-@JsonDeserialize(as = CreatePostDTO.class)
-public interface CreatePostDTO {
+public class CreatePostDTO {
     @NotNull
     @NotBlank
-    String getTitle();
+    private final String title;
 
     @NotNull
     @NotBlank
-    String getContent();
+    private final String content;
+
+    public CreatePostDTO(
+            @NotNull @NotBlank final String title, @NotNull @NotBlank final String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }

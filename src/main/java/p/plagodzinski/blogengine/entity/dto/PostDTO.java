@@ -1,23 +1,58 @@
 package p.plagodzinski.blogengine.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
 import p.plagodzinski.blogengine.entity.PostStatus;
 
 import java.util.List;
 
-@Value.Immutable
-@JsonSerialize(as = PostDTO.class)
-@JsonDeserialize(as = PostDTO.class)
-public interface PostDTO {
-    String getTitle();
+public class PostDTO {
 
-    String getContent();
+    private String title;
 
-    PostStatus getStatus();
+    private String content;
 
-    double getAverageRating();
+    private PostStatus status;
 
-    List<ReviewDTO> getPostReviews();
+    private double averageRating;
+
+    private List<ReviewDTO> postReviews;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(final String content) {
+        this.content = content;
+    }
+
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(final PostStatus status) {
+        this.status = status;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(final double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public List<ReviewDTO> getPostReviews() {
+        return postReviews;
+    }
+
+    public void setPostReviews(final List<ReviewDTO> postReviews) {
+        this.postReviews = postReviews;
+    }
 }

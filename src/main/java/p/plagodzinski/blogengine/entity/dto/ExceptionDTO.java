@@ -1,12 +1,14 @@
 package p.plagodzinski.blogengine.entity.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
+public class ExceptionDTO {
 
-@Value.Immutable
-@JsonSerialize(as = ExceptionDTO.class)
-@JsonDeserialize(as = ExceptionDTO.class)
-public interface ExceptionDTO {
-    String getErrorMsg();
+    private final String errormsg;
+
+    public ExceptionDTO(final String errormsg) {
+        this.errormsg = errormsg;
+    }
+
+    public String getErrormsg() {
+        return errormsg;
+    }
 }
