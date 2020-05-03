@@ -15,48 +15,48 @@ import javax.transaction.Transactional;
 
 @Service
 public class PostsManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostsManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PostsManager.class);
 
-    private final BlogPostsRepository blogPostsRepository;
-    private final PostsMapper postsMapper;
+  private final BlogPostsRepository blogPostsRepository;
+  private final PostsMapper postsMapper;
 
-    public PostsManager(
-            final BlogPostsRepository blogPostsRepository, final PostsMapper postsMapper) {
-        this.blogPostsRepository = blogPostsRepository;
-        this.postsMapper = postsMapper;
-    }
+  public PostsManager(
+          final BlogPostsRepository blogPostsRepository, final PostsMapper postsMapper) {
+    this.blogPostsRepository = blogPostsRepository;
+    this.postsMapper = postsMapper;
+  }
 
-    @Transactional
-    public CreatePostResponseDTO createNewPost(final CreatePostDTO createPostDTO) {
-        var blogPost = new BlogPost();
-        blogPost.fill(createPostDTO);
-        blogPost = blogPostsRepository.save(blogPost);
+  @Transactional
+  public CreatePostResponseDTO createNewPost(final CreatePostDTO createPostDTO) {
+    var blogPost = new BlogPost();
+    blogPost.fill(createPostDTO);
+    blogPost = blogPostsRepository.save(blogPost);
 
-        LOGGER.info("Create new post with id {}", blogPost.getId());
+    LOGGER.info("Create new post with id {}", blogPost.getId());
 
-        return postsMapper.mapToCreatePostResponse(blogPost);
-    }
+    return postsMapper.mapToCreatePostResponse(blogPost);
+  }
 
-    @Transactional(rollbackOn = NotFoundPostException.class)
-    public PostDTO getPostInfo(final long postId) {
-        return blogPostsRepository
-                .findById(postId)
-                .map(postsMapper::mapToGetPostInfoDTO)
-                .orElseThrow(() -> new NotFoundPostException(postId));
-    }
+  @Transactional(rollbackOn = NotFoundPostException.class)
+  public PostDTO getPostInfo(final long postId) {
+    return blogPostsRepository
+            .findById(postId)
+            .map(postsMapper::mapToGetPostInfoDTO)
+            .orElseThrow(() -> new NotFoundPostException(postId));
+  }
 
-    @Transactional(rollbackOn = NotFoundPostException.class)
-    public PostDTO changePost(final ChangePostDTO changePostDTO) {
-        return blogPostsRepository
-                .findById(changePostDTO.getId())
-                .map(
-                        blogPost -> {
-                            LOGGER.info(
-                                    "Change status of post {} to {}", blogPost.getId(), changePostDTO.getStatus());
-                            blogPost.update(changePostDTO);
-                            return blogPostsRepository.save(blogPost);
-                        })
-                .map(postsMapper::mapToGetPostInfoDTO)
-                .orElseThrow(() -> new NotFoundPostException(changePostDTO.getId()));
-    }
+  @Transactional(rollbackOn = NotFoundPostException.class)
+  public PostDTO changePost(final ChangePostDTO changePostDTO) {
+    return blogPostsRepository
+            .findById(changePostDTO.getId())
+            .map(
+                    blogPost -> {
+                      LOGGER.info(
+                              "Change status of post {} to {}", blogPost.getId(), changePostDTO.getStatus());
+                      blogPost.update(changePostDTO);
+                      return blogPostsRepository.save(blogPost);
+                    })
+            .map(postsMapper::mapToGetPostInfoDTO)
+            .orElseThrow(() -> new NotFoundPostException(changePostDTO.getId()));
+  }
 }

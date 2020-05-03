@@ -24,25 +24,32 @@ import java.util.List;
 public class BlogPost {
 
     private static final double NO_REVIEW_RATING = 0.0;
+
     @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<PostReview> postReviews = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "POST_ID")
     private Long id;
+
     @Version
     private Long version;
+
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "TITLE", length = 50, nullable = false)
     private String title;
+
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "CONTENT", nullable = false)
     private String content;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private PostStatus status;
+
     @Transient
     private double averageRating; // We only need to simply mapping by mapstruct
 
@@ -80,11 +87,11 @@ public class BlogPost {
         status = changePostDTO.getStatus();
     }
 
-  @Named("calculateAverageRatingFromReviews")
-  public double calculateAverageRatingFromReviews() {
-      return postReviews.stream()
-              .mapToDouble(PostReview::getRating)
-              .average()
-              .orElse(NO_REVIEW_RATING);
-  }
+    @Named("calculateAverageRatingFromReviews")
+    public double calculateAverageRatingFromReviews() {
+        return postReviews.stream()
+                .mapToDouble(PostReview::getRating)
+                .average()
+                .orElse(NO_REVIEW_RATING);
+    }
 }
